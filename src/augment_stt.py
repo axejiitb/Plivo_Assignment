@@ -135,7 +135,7 @@ def main():
             ex = generate_example()
             f.write(json.dumps(ex) + "\n")
 
-    print(f"✓ Generated {args.n} noisy STT examples → {args.output}")
+    print(f"Generated {args.n} noisy STT examples {args.output}")
 
 
 if __name__ == "__main__":
