@@ -21,6 +21,9 @@ def parse_args():
     ap.add_argument("--lr", type=float, default=5e-5)
     ap.add_argument("--max_length", type=int, default=256)
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    ap.add_argument("--freeze_layers", type=int, default=0)
+    ap.add_argument("--dropout", type=float, default=0.1)
+    ap.add_argument("--quantize", action="store_true")
     return ap.parse_args()
 
 
@@ -38,7 +41,13 @@ def main():
         collate_fn=lambda b: collate_batch(b, pad_token_id=tokenizer.pad_token_id),
     )
 
-    model = create_model(args.model_name)
+    model = create_model(
+        args.model_name,
+        freeze_layers=args.freeze_layers,
+        dropout=args.dropout,
+        quantize=args.quantize and args.device == "cpu"
+    )
+
     model.to(args.device)
     model.train()
 
